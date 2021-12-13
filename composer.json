@@ -1,0 +1,26 @@
+{
+    "name": "silverstripe-themes/foundational",
+    "description": "Foundational - A Silverstripe theme built on Foundation 6.7.4",
+    "type": "silverstripe-theme",
+    "keywords": ["silverstripe", "theme"],
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Bruce McKinnon",
+            "homepage": "https://ingeni.net"
+        }
+    ],
+    "require": {
+        "composer/installers": "*",
+        "silverstripe/framework": ">=4.0"
+    },
+	"extra": {
+        "expose": [
+            "dist",
+            "images",
+            "webfonts"
+        ]
+	},
+    "comments": "Run 'composer vendor-expose' from web root if any changes made"
+}
+

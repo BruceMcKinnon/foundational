@@ -1,0 +1,80 @@
+var gulp          = require('gulp');
+var concat = require('gulp-concat');
+const uglify = require('gulp-uglify');
+var browserSync   = require('browser-sync').create();
+var $             = require('gulp-load-plugins')();
+var autoprefixer  = require('autoprefixer');
+
+
+var sassPaths = [
+  'node_modules/foundation-sites/scss',
+  'node_modules/motion-ui/src',
+  'src/scss'
+];
+
+var jsPaths = [
+  'node_modules/foundation-sites/dist/js/foundation.js',
+  'node_modules/what-input/src/scripts/what-input.js',
+  'src/js/app.js'
+];
+
+function sass() {
+  return gulp.src('src/scss/app.scss')
+    .pipe($.sass({
+      includePaths: sassPaths,
+      outputStyle: 'compressed' // if css compressed **file size**
+    })
+      .on('error', $.sass.logError))
+    .pipe($.postcss([
+      autoprefixer()
+    ]))
+    .pipe(gulp.dest('dist/css'))
+    .pipe(browserSync.stream());
+};
+
+
+// In production, the file is minified
+function minjs() {
+  return gulp.src(jsPaths)
+    .pipe(concat('app.js'))
+    // Minify the file
+    //.pipe(uglify())
+    // Output
+    .pipe(gulp.dest('dist/js'))
+};
+
+
+
+
+
+
+
+function serve() {
+  /*browserSync.init({
+    server: "./"
+  });
+  */
+  
+  gulp.watch("src/scss/*.scss", sass);
+
+  gulp.watch('src/js/*.js', minjs);
+  //gulp.watch('images/**/*').on('all', gulp.series(images, browser.reload));
+
+  //gulp.watch("*.html").on('change', browserSync.reload);
+}
+
+
+gulp.task('minjs', minjs);
+gulp.task('sass', sass);
+
+gulp.task('serve', gulp.series('sass', 'minjs', serve));
+gulp.task('default', gulp.series('sass', 'minjs', serve));
+
+
+
+// Build the "dist" folder by running all of the below tasks
+gulp.task('build',
+ gulp.series(minjs, sass)
+);
+
+
